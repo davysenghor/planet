@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulaire d'inscription</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+
+</head>
+<body>
+
+  <div class="container">
+    <h2 class="text-center">Panneau D'inscription D'utilisateurs</h2>
+
+    <form>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Activer</th>
+            <th scope="col">Nom d'utilisateur</th>
+            <th scope="col">Mot de passe</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="activateInput1">
+                <label class="custom-control-label" for="activateInput1"></label>
+              </div>
+            </td>
+            <td>
+              <input type="text" class="form-control" id="username1" disabled>
+            </td>
+            <td>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password1" disabled>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="far fa-eye" id="showPasswordBtn1"></i>
+                  </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="activateInput2">
+                <label class="custom-control-label" for="activateInput2"></label>
+              </div>
+            </td>
+            <td>
+              <input type="text" class="form-control" id="username2" disabled>
+            </td>
+            <td>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password2" disabled>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="far fa-eye" id="showPasswordBtn2"></i>
+                  </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="activateInput3">
+                <label class="custom-control-label" for="activateInput3"></label>
+              </div>
+            </td>
+            <td>
+              <input type="text" class="form-control" id="username3" disabled>
+            </td>
+            <td>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password3" disabled>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="far fa-eye" id="showPasswordBtn3"></i>
+                  </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="activateInput4">
+                <label class="custom-control-label" for="activateInput4"></label>
+              </div>
+            </td>
+            <td>
+              <input type="text" class="form-control" id="username4" disabled>
+            </td>
+            <td>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password4" disabled>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="far fa-eye" id="showPasswordBtn4"></i>
+                  </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="activateInput5">
+                <label class="custom-control-label" for="activateInput5"></label>
+              </div>
+            </td>
+            <td>
+              <input type="text" class="form-control" id="username5" disabled>
+            </td>
+            <td>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password5" disabled>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="far fa-eye" id="showPasswordBtn5"></i>
+                  </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!-- Ajoutez d'autres lignes au besoin -->
+        </tbody>
+      </table>
+
+      <button type="submit" class="btn btn-primary btn-block" id="registerButton" disabled>Donner accès</button>
+    </form>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('[id^="activateInput"]').change(function() {
+        var usernameInput = $(this).closest('tr').find('[id^="username"]');
+        var passwordInput = $(this).closest('tr').find('[id^="password"]');
+        var registerButton = $('#registerButton');
+
+        usernameInput.prop('disabled', !this.checked);
+        passwordInput.prop('disabled', !this.checked);
+        registerButton.prop('disabled', !$('[id^="activateInput"]:checked').length > 0);
+      });
+
+      $('[id^="showPasswordBtn"]').click(function() {
+        var passwordInput = $(this).closest('.input-group').find('[id^="password"]');
+        var icon = $(this).find('i');
+
+        if (passwordInput.attr('type') === 'password') {
+          passwordInput.attr('type', 'text');
+          icon.removeClass('far fa-eye').addClass('far fa-eye-slash');
+        } else {
+          passwordInput.attr('type', 'password');
+          icon.removeClass('far fa-eye-slash').addClass('far fa-eye');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+

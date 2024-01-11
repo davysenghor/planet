@@ -1,0 +1,160 @@
+1) ere solution 
+c'est de lancer la page contenant la partie (requete sql - ie coté serveur
+
+http://localhost/InterpertesBizzAPP/fetch_mes_missions.php
+
+
+<?php
+
+//fetch.php
+
+// faire des print_r que pour degubber le sql
+// Par contre après le ajax puisse bien recuperer la reponse pas de print_r , il faut il tout effacer apreds le debugg
+
+// ================= connexion à la base de données
+	include('connexion_base_donnees.php');
+$debug_mode = 0;
+$debug_cette_partie=0;
+include('biblio_fonctions_php.php');
+/*   */
+
+$table = 'llx_missions_mission';
+
+$primaryKey = 'rowid';
+
+
+// server connection information
+if( $mode_debug == 1)
+{
+$sql_details = array(
+    'user' => 'root',
+    'pass' => '',
+    'db'   => 'db_systeme_information_ama',
+    'host' => 'localhost'
+);
+}
+if( $mode_debug == 0)
+{
+$sql_details = array(
+   /* 'user' => 'sentravamasoft',
+    'pass' => 'Moctar250590',
+    'db'   => 'sentravamasoft',
+    'host' => 'sentravamasoft.mysql.db'*/
+	    'user' => 'root',
+    'pass' => '',
+    'db'   => 'db_systeme_information_ama',
+    'host' => 'localhost'
+);
+}
+try
+{
+//prévu pour ne faire select que des colonnes qui  m'interressent pour optimiser le temps ( certainement il utilsera moii ns d temps que si on fait un selet * )	
+$columns = getColumnNames($sql_details['db'],$table);
+
+if($debug_mode==1 && $debug_cette_partie==1){print_r($columns);}
+
+//$filtre_choisi = " nominterprete "; // colonne sur laquelle le grand filtre fonctionne
+
+$query = "SELECT * FROM ". $table. " ";
+
+/*
+if($debug_mode==0)
+{
+if(isset($_POST["search"]["value"]))
+{
+$debut_requete = 'WHERE' .$filtre_choisi;
+
+ $query .= $debut_requete. ' ';
+}
+
+if(isset($_POST["order"]))
+{
+ $query .= 'ORDER BY '.$column[$_POST['order']['0']['column']].' '.$_POST['order']['0']['dir'].' ';
+}
+else
+{
+ $query .= 'ORDER BY rowid DESC ';
+}
+$query1 = '';
+
+if($_POST["length"] != -1)
+{
+ $query1 = 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
+}
+}
+*/
+
+$statement = $connexion_bd->prepare($query);
+
+$statement->execute();
+$result = $statement->fetchAll();
+
+
+$data = array();
+// columns to display
+foreach($result as $row)
+{
+ $sub_array = array();
+ $sub_array[] = $row['rowid'];
+ $sub_array[] = $row['debutmission'];
+ $sub_array[] = $row['finmission'];
+ $sub_array[] = $row['nominterprete'];
+
+   $data[] = $sub_array;
+}
+
+function count_all_data($connexion_bd)
+{
+ $query = "SELECT rowid, debutmission, finmission, nominterprete FROM llx_missions_mission";
+ $statement = $connexion_bd->prepare($query);
+ $statement->execute();
+ return $statement->rowCount();
+}
+
+$output = array(
+ //'draw'   => intval($_POST['draw']),
+ //'recordsTotal' => count_all_data($connexion_bd),
+ //'recordsFiltered' => $number_filter_row,
+ 'data'   => $data
+);
+
+
+ // donnees envoyer à ajax pour notre datatable; les printr ou echo ne sont pas acceptable comme reponse
+							// Pas de de echo ou printr dans ce fichier
+//if($debug_mode==1 && $debug_cette_partie==1)  
+	echo json_encode($output);
+
+}
+catch (Exception $e) {
+    echo 'Exception reçue : ',  $e->getMessage(), "\n";
+}
+?>
+		
+		
+		//======================================================
+
+
+
+
+
+
+Exemple permettant de déboguer sur le console
+
+ var dataTable = $('#tb_missions_interprete').DataTable({
+
+  ajax: {
+        url: 'fetch_mes_missions.php',
+		error: function (jqXHR, textStatus, errorThrown) {
+// Do something here
+		console.log( errorThrown);
+		var toto = jqXHR;
+		console.log(jqXHR);
+		console.log(jqXHR.done)
+},
+        type: 'POST'
+    },
+ });
+ 
+ 
+ 
+ Rappel des configuration ajax : https://api.jquery.com/jQuery.ajax/#jqXHR
